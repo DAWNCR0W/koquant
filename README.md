@@ -1,29 +1,59 @@
 # KOQUANT
 
-KOQUANT is a Korean stock realtime quant trading platform project for research, backtesting, paper trading, and risk-controlled live automation.
+KOQUANT는 한국 주식 시장에 특화된 실시간 퀀트 자동매매 플랫폼입니다. 이름은 `Korea Quant`에서 가져왔으며, 개인 투자자가 집에서도 한국 주식 데이터를 수집하고, 전략을 검증하고, 모의투자를 거쳐 제한적으로 실계좌 자동매매까지 운용할 수 있는 시스템을 목표로 합니다.
 
-## Goals
+## 프로젝트 목표
 
-- Build a Korean-market-first quant trading system for individual operators.
-- Support research, historical data collection, strategy backtesting, paper trading, and cautious live trading.
-- Treat risk controls, broker API limits, order traceability, and operational runbooks as first-class features.
-- Start with Korea Investment & Securities Open API integration, while keeping broker adapters replaceable.
+- 한국 주식 시장의 장중 매매 흐름에 맞춘 퀀트 자동매매 시스템을 만든다.
+- 데이터 수집, 백테스트, 모의투자, 실계좌 운용을 하나의 흐름으로 연결한다.
+- 한국투자증권 Open API를 1차 브로커로 사용하되, 향후 다른 증권사 어댑터를 붙일 수 있게 설계한다.
+- 실시간 시세, 주문, 체결, 포지션, 리스크, 장애 대응을 모두 추적 가능하게 만든다.
+- 수익률보다 안전성, 재현성, 통제 가능성, 운영 기록을 우선한다.
 
-## Planned Stack
+## 핵심 기능 계획
+
+- 한국 주식 종목 정보와 과거 데이터 수집
+- 분봉/장중 전략 백테스트
+- 실시간 체결가와 호가 수신
+- 전략 신호 생성
+- 리스크 엔진 기반 주문 승인/차단
+- 모의투자 자동매매
+- 제한적 실계좌 자동매매
+- 주문, 체결, 미체결, 포지션 추적
+- API 호출 제한과 WebSocket 구독 관리
+- 장중 장애 대응과 긴급 정지
+- 장마감 리포트 생성
+
+## 계획 중인 기술 스택
 
 - Python, FastAPI, asyncio
 - React, TypeScript
 - PostgreSQL, TimescaleDB
 - Redis Streams
 - pykrx, FinanceDataReader
-- Korea Investment & Securities Open API
+- 한국투자증권 Open API
 - pytest, Playwright
 - Docker Compose
 
-## Status
+## 개발 원칙
 
-This repository is currently in the planning and scaffolding phase.
+KOQUANT는 단순히 주문을 자동으로 넣는 봇이 아닙니다. 자동매매에서 더 중요한 것은 주문이 왜 나갔는지, 어떤 리스크 검사를 통과했는지, 체결과 포지션이 정확히 맞는지, 문제가 생겼을 때 어떻게 멈출 수 있는지입니다.
 
-## Safety Notice
+따라서 KOQUANT는 다음 원칙을 따릅니다.
 
-KOQUANT does not provide investment advice and does not guarantee returns. Automated trading can cause financial loss because of strategy errors, API failures, network issues, market volatility, duplicate orders, rejected orders, or stale account state. Live trading should only be enabled after backtesting, paper trading, risk-limit verification, and small-scale validation.
+- 모든 주문은 전략 신호와 리스크 판단에 연결한다.
+- 모든 체결은 주문과 포지션에 연결한다.
+- 모든 실계좌 기능은 기본적으로 잠근다.
+- 모든 장애는 신규 주문 차단으로 이어질 수 있어야 한다.
+- 모든 API 호출은 호출 제한과 우선순위를 고려한다.
+- 모든 자동매매 세션은 장마감 리포트로 끝난다.
+
+## 현재 상태
+
+현재 이 저장소는 기획과 초기 설계 단계입니다. 상세 설계 문서는 별도로 작성되어 있으며, 이후 MVP 개발 범위를 기준으로 프로젝트 구조와 백로그를 구성할 예정입니다.
+
+## 주의사항
+
+KOQUANT는 투자 권유나 수익 보장을 목적으로 하지 않습니다. 자동매매는 전략 오류, 프로그램 오류, 증권사 API 장애, 네트워크 장애, 시장 급변, 중복 주문, 주문 거절, 계좌 동기화 실패 등으로 실제 손실을 발생시킬 수 있습니다.
+
+실계좌 운용은 반드시 충분한 백테스트, 모의투자, 리스크 한도 검증, 소액 운용 검증 이후에만 진행해야 합니다.
